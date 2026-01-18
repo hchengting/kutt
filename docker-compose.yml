@@ -1,14 +1,16 @@
 services:
-  server:
-    build:
-      context: .
+  kutt:
+    build: .
+    container_name: kutt
+    restart: always
+    mem_limit: 512m
+    expose: [3000/tcp]
+    env_file: .env
     volumes:
-       - db_data_sqlite:/var/lib/kutt
-       - custom:/kutt/custom
-    environment:
-      DB_FILENAME: "/var/lib/kutt/data.sqlite"
-    ports:
-      - 3000:3000
-volumes:
-  db_data_sqlite:
-  custom:
+      - ~/apps/kutt/db:/kutt/db
+    networks:
+      - caddy
+
+networks:
+  caddy:
+    external: true
